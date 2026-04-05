@@ -11,4 +11,4 @@ if __name__ == "__main__":
     gdf = fetch_accidents()
     build_map()
     process_stats()
-    print(f"\n{len(gdf):,} accidents — cd web && npm run dev")
+    print(f"\n{len(gdf):,} accidents, finished")

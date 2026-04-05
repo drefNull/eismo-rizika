@@ -392,6 +392,13 @@ export default function MapPage() {
           </a>
           . Duomenys apdoroti.
         </div>
+        <div className="rr-source" style={{ marginTop: 6 }}>
+          Atviro kodo projektas –{' '}
+          <a href="https://github.com/drefNull/eismo-rizika" target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
+          .
+        </div>
       </div>
 
       <button

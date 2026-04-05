@@ -315,6 +315,13 @@ export default function DashboardPage() {
         </a>
         . Duomenys apdoroti.
       </div>
+      <div className="dash-source">
+        Atviro kodo projektas –{' '}
+        <a href="https://github.com/drefNull/eismo-rizika" target="_blank" rel="noopener noreferrer">
+          GitHub
+        </a>
+        .
+      </div>
     </div>
   );
 }
