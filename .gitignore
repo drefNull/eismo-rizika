@@ -1,0 +1,61 @@
+# virtual envs
+venv/
+.venv/
+
+# raw and processed data
+data/raw/
+data/processed/
+
+# generated web assets
+web/public/data/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+output/
+cache/
+
+# frontend
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+.vite/
+.next/
+.nuxt/
+.svelte-kit/
+.parcel-cache/
+.turbo/
+.vercel/
+
+# geospatial artefacts
+*.gpkg
+*.shp
+*.dbf
+*.shx
+*.prj
+*.cpg
+*.pkl
+*.joblib
+*.h5
+*.model
+
+# IDE & OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# misc
+.env
+.env.*
+*.log
+notebooks/.ipynb_checkpoints/

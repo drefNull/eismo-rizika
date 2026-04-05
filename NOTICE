@@ -1,0 +1,11 @@
+Eismo Rizika
+Copyright 2026 Visvaldas
+
+This software processes data from the Lithuanian Open Data Portal:
+  Title: Eismo įvykiai Lietuvoje (Road accidents in Lithuania)
+  Source: https://data.gov.lt/datasets/509/
+  License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+           https://creativecommons.org/licenses/by/4.0/
+
+The data is not distributed with this software. Users must download it
+separately from the source above and comply with its license terms.
