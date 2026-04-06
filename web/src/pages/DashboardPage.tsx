@@ -320,7 +320,11 @@ export default function DashboardPage() {
         <a href="https://github.com/drefNull/eismo-rizika" target="_blank" rel="noopener noreferrer">
           GitHub
         </a>
-        .
+        . Apsaugota{' '}
+        <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener noreferrer">
+          Apache 2.0
+        </a>{' '}
+        licencija.
       </div>
     </div>
   );
