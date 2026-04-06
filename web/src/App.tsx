@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route, NavLink, Link } from 'react-router-dom';
+import AnalyticsConsent from './AnalyticsConsent';
 import MapPage from './pages/MapPage';
 import DashboardPage from './pages/DashboardPage';
 import './global.css';
@@ -47,6 +48,8 @@ export default function App() {
         <Route path="/" element={<MapPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
       </Routes>
+
+      <AnalyticsConsent />
     </BrowserRouter>
   );
 }
