@@ -1,4 +1,4 @@
-# Eismo Rizika
+<h1><a href="https://eismorizika.balionidas.xyz/" target="_blank" rel="noopener noreferrer">Eismo Rizika</a></h1>
 
 Interactive map and statistics dashboard for Lithuanian road accidents from 2013 to 2024, built on open data from [data.gov.lt](https://data.gov.lt/datasets/509/?resource_version=1290).
 
@@ -74,4 +74,3 @@ riskroads/
 ## License
 
 Apache 2.0 - see [LICENSE](LICENSE) and [NOTICE](NOTICE).
-
