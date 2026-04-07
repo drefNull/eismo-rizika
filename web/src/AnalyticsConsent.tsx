@@ -1,4 +1,9 @@
 import { useEffect, useState } from 'react';
+import {
+  flushPendingConsentGrant,
+  markPendingConsentGrant,
+  trackEvent,
+} from './analytics';
 
 const WEBSITE_ID = '69faf31a-65a3-40a6-b838-19ab1844c86d';
 const HOSTNAME = 'eismorizika.balionidas.xyz';
@@ -17,6 +22,7 @@ export default function AnalyticsConsent() {
 
   useEffect(() => {
     if (consent !== 'accepted' || document.getElementById('umami-script')) {
+      flushPendingConsentGrant();
       return;
     }
 
@@ -29,15 +35,22 @@ export default function AnalyticsConsent() {
     script.dataset.doNotTrack = 'true';
     script.dataset.excludeSearch = 'true';
     script.dataset.excludeHash = 'true';
+    script.onload = () => flushPendingConsentGrant();
 
     document.head.appendChild(script);
   }, [consent]);
 
   const saveConsent = (value: Consent) => {
     const reload = consent === 'accepted' && value === 'rejected';
+
+    if (consent !== 'accepted' && value === 'accepted') {
+      markPendingConsentGrant();
+    }
+
     window.localStorage.setItem('rr.analytics-consent', value);
     setConsent(value);
     setSettingsOpen(false);
+
     if (reload) {
       window.location.reload();
     }
@@ -49,7 +62,10 @@ export default function AnalyticsConsent() {
         <button
           type="button"
           className="privacy-settings-btn"
-          onClick={() => setSettingsOpen(true)}
+          onClick={() => {
+            trackEvent('privacy_settings_open', { source: 'floating_button' });
+            setSettingsOpen(true);
+          }}
         >
           Privatumo nustatymai
         </button>
@@ -65,7 +81,10 @@ export default function AnalyticsConsent() {
               <button
                 type="button"
                 className="consent-banner-close"
-                onClick={() => setSettingsOpen(false)}
+                onClick={() => {
+                  trackEvent('privacy_settings_close', { source: 'close_button' });
+                  setSettingsOpen(false);
+                }}
                 aria-label="Uždaryti privatumo nustatymus"
               >
                 ✕
@@ -74,8 +93,9 @@ export default function AnalyticsConsent() {
           </div>
 
           <p className="consent-banner-text">
-            Jei sutinkate, įjungsime puslapių peržiūrų analitiką, kad galėtume
-            gerinti svetainę.
+            Jei sutinkate, įjungsime puslapių peržiūrų ir naudojimo analitiką,
+            kad galėtume gerinti svetainę, pavyzdžiui matyti, kuriuos mygtukus
+            spaudžiate ar kuriuos sluoksnius pasirenkate.
           </p>
 
           <p className="consent-banner-note">

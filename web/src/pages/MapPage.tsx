@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import Supercluster from 'supercluster';
 import 'leaflet/dist/leaflet.css';
+import { trackEvent } from '../analytics';
 import type { AccidentData, AccidentPoint } from '../types';
 
 function yearColor(yr: number, allYears: number[]): string {
@@ -283,18 +284,28 @@ export default function MapPage() {
   const hasAccidents = Boolean(accidents && Object.values(accidents.by_year).some(pts => pts.length > 0));
 
   function toggleYear(yr: number) {
+    const nextVisible = !activeYears.has(yr);
+    const heatAutoDisabled = nextVisible && heatVisible && !heatAutoDismissed.current;
+
     setActiveYears(prev => {
       const next = new Set(prev);
       if (next.has(yr)) {
         next.delete(yr);
       } else {
         next.add(yr);
-        if (heatVisible && !heatAutoDismissed.current) {
-          heatAutoDismissed.current = true;
-          setHeatVisible(false);
-        }
       }
       return next;
+    });
+
+    if (heatAutoDisabled) {
+      heatAutoDismissed.current = true;
+      setHeatVisible(false);
+    }
+
+    trackEvent('map_year_toggle', {
+      year: yr,
+      state: nextVisible ? 'on' : 'off',
+      heat_auto_disabled: heatAutoDisabled,
     });
   }
 
@@ -324,7 +335,14 @@ export default function MapPage() {
             <div className="rr-kicker">Sluoksniai</div>
             <div className="rr-title">Lietuvos eismo įvykiai</div>
           </div>
-          <button className="rr-close-btn" onClick={() => setPanelOpen(false)} title="Uždaryti skydelį">
+          <button
+            className="rr-close-btn"
+            onClick={() => {
+              trackEvent('map_panel_close', { source: 'panel_button' });
+              setPanelOpen(false);
+            }}
+            title="Uždaryti skydelį"
+          >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
               <path d="M1 1l11 11M12 1L1 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
@@ -339,7 +357,11 @@ export default function MapPage() {
             </div>
             <button
               className={`lyr-btn${heatVisible ? ' on' : ''}`}
-              onClick={() => setHeatVisible(v => !v)}
+              onClick={() => {
+                const nextVisible = !heatVisible;
+                trackEvent('map_heat_toggle', { state: nextVisible ? 'on' : 'off' });
+                setHeatVisible(nextVisible);
+              }}
             >
               <span className="lyr-swatch" style={{ background: '#f46d43' }} />
               <span className="lyr-copy">
@@ -383,22 +405,42 @@ export default function MapPage() {
 
         <div className="rr-source">
           Duomenų šaltinis:{' '}
-          <a href="https://data.gov.lt/datasets/509/?resource_version=1290" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://data.gov.lt/datasets/509/?resource_version=1290"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackEvent('outbound_link_click', { link: 'data_gov_lt' })}
+          >
             data.gov.lt, Eismo įvykiai Lietuvoje
           </a>
           {', '}licencija{' '}
-          <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://creativecommons.org/licenses/by/4.0/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackEvent('outbound_link_click', { link: 'cc_by_4_0' })}
+          >
             CC BY 4.0
           </a>
           . Duomenys apdoroti.
         </div>
         <div className="rr-source" style={{ marginTop: 6 }}>
           Atviro kodo projektas –{' '}
-          <a href="https://github.com/drefNull/eismo-rizika" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://github.com/drefNull/eismo-rizika"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackEvent('outbound_link_click', { link: 'github_repo' })}
+          >
             GitHub
           </a>
           . Apsaugota{' '}
-          <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://www.apache.org/licenses/LICENSE-2.0"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackEvent('outbound_link_click', { link: 'apache_2_0' })}
+          >
             Apache 2.0
           </a>{' '}
           licencija.
@@ -407,7 +449,10 @@ export default function MapPage() {
 
       <button
         className={`rr-tab${panelOpen ? '' : ' show'}`}
-        onClick={() => setPanelOpen(true)}
+        onClick={() => {
+          trackEvent('map_panel_open', { source: 'floating_tab' });
+          setPanelOpen(true);
+        }}
         title="Atidaryti sluoksnius"
       >
         <svg width="11" height="14" viewBox="0 0 11 14" fill="none">
